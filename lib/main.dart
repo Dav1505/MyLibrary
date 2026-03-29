@@ -1,6 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:mylibrary/ui/behaviors/AppLocalizations.dart';
 import 'package:mylibrary/ui/widgets/AuthGate.dart';
@@ -14,6 +15,8 @@ Future<void> main() async{
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform
   );
+  Gemini.init(apiKey: dotenv.env["GEMINI_API_KEY"] ?? "");
+
   runApp(const MyApp());
 }
 

@@ -32,7 +32,7 @@
   "genre": "Genre: ",
   "selectDate": "Select a date: ",
   "select_genre": "Select a genre: ",
-  "searchBook": "Search a book: ",
+  "searchBook": "Search a book title: ",
   "search_instruction": "Search a title or an author",
   "searchError": "An error occurred during the search",
   "addCatalog": "added to your catalog!",
@@ -51,5 +51,6 @@
   "loginRequired": "You have to login again to delete your account",
   "emailAlreadyInUse": "Email already in use",
   "invalidEmail": "Please insert a valid email",
-  "weakPassword": "Please choose a stronger password (at least 6 characters)"
+  "weakPassword": "Please choose a stronger password (at least 6 characters)",
+  "AI_Assistant": "AI Assistant"
 }

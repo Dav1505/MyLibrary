@@ -32,7 +32,7 @@
   "genre": "Genere: ",
   "selectDate": "Seleziona una data: ",
   "select_genre": "Seleziona un genere: ",
-  "searchBook": "Cerca un libro: ",
+  "searchBook": "Cerca il titolo di un libro: ",
   "search_instruction": "Cerca un titolo o un autore",
   "searchError": "Un errore è avvenuto durante la ricerca",
   "addCatalog": "aggiunto al tuo catalogo!",
@@ -51,5 +51,6 @@
   "loginRequired": "Devi effettuare nuovamente il login per eliminare l'account",
   "emailAlreadyInUse": "Email già in uso",
   "invalidEmail": "Perfavore inserire un email valida",
-  "weakPassword": "Perfavore scegliere una password più forte (almeno 6 carateri)"
+  "weakPassword": "Perfavore scegliere una password più forte (almeno 6 carateri)",
+  "AI_Assistant": "Assistente AI"
 }

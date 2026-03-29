@@ -5,6 +5,7 @@ import 'package:mylibrary/ui/pages/UserPage.dart';
 
 import '../../model/Model.dart';
 import '../behaviors/AppLocalizations.dart';
+import 'ChatBotPage.dart';
 
 class Layout extends StatefulWidget {
   final String title;
@@ -64,24 +65,24 @@ class _LayoutState extends State<Layout> {
               icon: const Icon(Icons.translate_rounded),
             ),
           ],
-          bottom: TabBar(
-            indicatorColor: theme.colorScheme.primary, // Linea sotto la tab selezionata
-            labelColor: theme.colorScheme.primary,     // Testo tab selezionata
-            unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.6), // Testo non selezionato
-            indicatorWeight: 3,
-            tabs: [
-              Tab(text: AppLocalizations.of(context)!.translate("home"), icon: const Icon(Icons.home_rounded)),
-              Tab(text: AppLocalizations.of(context)!.translate("search"), icon: const Icon(Icons.search_rounded)),
-              Tab(text: AppLocalizations.of(context)!.translate("user"), icon: const Icon(Icons.person_rounded)),
-            ],
-          ),
         ),
         body: TabBarView(
             children: [
               HomePage(),
-              SearchPage(),
+              ChatBotPage(),
               UserPage(),
             ]
+        ),
+        bottomNavigationBar: TabBar(
+          indicatorColor: theme.colorScheme.primary,
+          labelColor: theme.colorScheme.primary,
+          unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+          indicatorWeight: 3,
+          tabs: [
+            Tab(text: AppLocalizations.of(context)!.translate("home"), icon: const Icon(Icons.home_filled)),
+            Tab(text: AppLocalizations.of(context)!.translate("AI_Assistant"), icon: const Icon(Icons.auto_awesome)),
+            Tab(text: AppLocalizations.of(context)!.translate("user"), icon: const Icon(Icons.person)),
+          ],
         ),
       ),
     );

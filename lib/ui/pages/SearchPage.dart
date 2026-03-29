@@ -24,6 +24,13 @@ class _SearchPageState extends State<SearchPage> {
     final theme = Theme.of(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.translate("search")),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: (){Navigator.of(context).pop();},
+        ),
+      ),
       body: CustomScrollView(
         slivers: [
           // Barra di ricerca "flottante"
@@ -32,7 +39,7 @@ class _SearchPageState extends State<SearchPage> {
             sliver: SliverToBoxAdapter(
               child: Container(
                 decoration: BoxDecoration(
-                  color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+                  color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(25),
                 ),
                 child: TextField(
