@@ -52,5 +52,6 @@
   "emailAlreadyInUse": "Email già in uso",
   "invalidEmail": "Perfavore inserire un email valida",
   "weakPassword": "Perfavore scegliere una password più forte (almeno 6 carateri)",
-  "AI_Assistant": "Assistente AI"
+  "AI_Assistant": "Assistente AI",
+  "System_Instruction": "Sei un assistente esperto di libri. Aiuta l'utente a gestire la sua libreria personale e consiglia nuove letture quando richiesto. Usa il Markdown per formattare la risposta (elenchi e grassetti ad esempio)."
 }

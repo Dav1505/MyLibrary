@@ -50,7 +50,7 @@ class UserPage extends StatelessWidget {
               // --- CARD INFORMAZIONI ---
               Card(
                 elevation: 0,
-                color: theme.colorScheme.surfaceContainerHighest.withOpacity(0.3),
+                color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.3),
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                 child: Column(
                   children: [

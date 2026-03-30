@@ -48,7 +48,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
 
     // Utilizziamo promptStream per l'effetto scrittura e per evitare blocchi UI
     gemini.promptStream(parts: [
-      Part.text("Sei un assistente esperto di libri e biblioteconomia. Aiuta l'utente a gestire la sua libreria e consiglia letture. Usa il Markdown per formattare elenchi e grassetti."),
+      Part.text(AppLocalizations.of(context)!.translate("System_Instruction")),
       Part.text(userMessage),
     ]).listen((value) {
       // Riceviamo i chunk di testo

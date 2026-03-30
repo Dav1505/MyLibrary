@@ -52,5 +52,6 @@
   "emailAlreadyInUse": "Email already in use",
   "invalidEmail": "Please insert a valid email",
   "weakPassword": "Please choose a stronger password (at least 6 characters)",
-  "AI_Assistant": "AI Assistant"
+  "AI_Assistant": "AI Assistant",
+  "System_Instruction": "You are an expert book assistant. Help the user manage his personal library and suggest him new books to read when asked. Use MarkDown to format your answer (lists and bold text for example)."
 }

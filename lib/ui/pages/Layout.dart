@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mylibrary/ui/pages/HomePage.dart';
-import 'package:mylibrary/ui/pages/SearchPage.dart';
 import 'package:mylibrary/ui/pages/UserPage.dart';
 
 import '../../model/Model.dart';
