@@ -112,11 +112,11 @@ class _ChatBotPageState extends State<ChatBotPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.auto_awesome, size: 64, color: theme.colorScheme.primary.withOpacity(0.5)),
+          Icon(Icons.auto_awesome, size: 64, color: theme.colorScheme.primary.withValues(alpha: 0.5)),
           const SizedBox(height: 16),
           Text(
             "Chiedimi consigli sui tuoi libri!",
-            style: TextStyle(color: theme.colorScheme.onSurface.withOpacity(0.6)),
+            style: TextStyle(color: theme.colorScheme.onSurface.withValues(alpha: 0.6)),
           ),
         ],
       ),
@@ -131,7 +131,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.85),
         decoration: BoxDecoration(
-          color: isUser ? theme.colorScheme.primary : theme.colorScheme.surfaceVariant,
+          color: isUser ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
@@ -142,7 +142,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
         child: isUser
             ? Text(
           msg["content"]!,
-          style: TextStyle(color: theme.colorScheme.onPrimary, fontSize: 15),
+          style: TextStyle(color: theme.colorScheme.onPrimary, fontSize: 15, letterSpacing: 0.5, height: 1.5),
         )
             : MarkdownBody(
           data: msg["content"]!,
@@ -161,7 +161,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
       padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
       decoration: BoxDecoration(
         color: theme.colorScheme.surface,
-        boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -5))],
+        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, -5))],
       ),
       child: Row(
         children: [
@@ -169,6 +169,9 @@ class _ChatBotPageState extends State<ChatBotPage> {
             child: TextField(
               controller: _controller,
               onSubmitted: (_) => _sendMessage(),
+              maxLines: null,
+              keyboardType: TextInputType.multiline,
+              textInputAction: TextInputAction.newline,
               decoration: InputDecoration(
                 hintText: "Scrivi un messaggio...",
                 filled: true,
