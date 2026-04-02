@@ -16,7 +16,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
   final ScrollController _scrollController = ScrollController();
 
   // Lista messaggi: ogni mappa ha "role" (user/model) e "content"
-  final List<Map<String, String>> _messages = [];
+  final List<Map<String, dynamic>> _messages = [];
   bool _isTyping = false;
 
   void _scrollToBottom() {
@@ -31,42 +31,42 @@ class _ChatBotPageState extends State<ChatBotPage> {
     });
   }
 
-  void _sendMessage() {
+  void _sendMessage() async {
     if (_controller.text.trim().isEmpty) return;
 
-    String userMessage = _controller.text.trim();
+    final userText = _controller.text.trim();
+    _controller.clear();
+
     setState(() {
-      _messages.add({"role": "user", "content": userMessage});
-      _messages.add({"role": "model", "content": ""}); // Placeholder per la risposta
+      _messages.add({"role": "user", "content": userText});
+      _messages.add({"role": "model", "content": "Sto pensando...", "isFinished": false});
       _isTyping = true;
     });
-    _controller.clear();
-    _scrollToBottom();
 
-    int lastIndex = _messages.length - 1;
-    String fullResponse = "";
+    final lastIndex = _messages.length - 1;
 
-    // Utilizziamo promptStream per l'effetto scrittura e per evitare blocchi UI
-    gemini.promptStream(parts: [
-      Part.text(AppLocalizations.of(context)!.translate("System_Instruction")),
-      Part.text(userMessage),
-    ]).listen((value) {
-      // Riceviamo i chunk di testo
-      final String chunk = value?.output ?? "";
-      fullResponse += chunk;
+    try {
+      // PASSAGGIO A PROMPT (Risposta completa, non stream)
+      final response = await gemini.prompt(parts: [
+        Part.text(AppLocalizations.of(context)!.translate("System_Instruction")),
+        Part.text(userText),
+      ]);
 
       setState(() {
-        _messages[lastIndex]["content"] = fullResponse;
-      });
-      _scrollToBottom();
-    }, onDone: () {
-      setState(() => _isTyping = false);
-    }, onError: (e) {
-      setState(() {
-        _messages[lastIndex]["content"] = "Spiacente, si è verificato un errore di connessione.";
+        // Puliamo il testo e lo assegniamo tutto in una volta
+        _messages[lastIndex]["content"] = response?.output?.trim() ?? "Nessuna risposta ricevuta.";
+        _messages[lastIndex]["isFinished"] = true;
         _isTyping = false;
       });
-    });
+
+      _scrollToBottom();
+    } catch (e) {
+      debugPrint("Errore Gemini: $e");
+      setState(() {
+        _isTyping = false;
+        _messages[lastIndex]["content"] = "⚠️ Errore di connessione o server non disponibile (503).";
+      });
+    }
   }
 
   @override
@@ -101,7 +101,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
             ),
 
           // Barra di Input
-          _buildInputBar(theme),
+          _buildInputArea(),
         ],
       ),
     );
@@ -123,7 +123,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
     );
   }
 
-  Widget _buildMessageBubble(Map<String, String> msg, bool isUser, ThemeData theme) {
+  Widget _buildMessageBubble(Map<String, dynamic> msg, bool isUser, ThemeData theme) {
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -131,7 +131,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
         padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
         constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.85),
         decoration: BoxDecoration(
-          color: isUser ? theme.colorScheme.primary : theme.colorScheme.surfaceContainerHighest,
+          color: isUser ? theme.colorScheme.primary : theme.colorScheme.onSurface,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
@@ -147,7 +147,7 @@ class _ChatBotPageState extends State<ChatBotPage> {
             : MarkdownBody(
           data: msg["content"]!,
           styleSheet: MarkdownStyleSheet(
-            p: TextStyle(color: theme.colorScheme.onSurfaceVariant, fontSize: 15),
+            p: TextStyle(color: theme.colorScheme.onPrimary, fontSize: 15),
             strong: const TextStyle(fontWeight: FontWeight.bold),
             listBullet: TextStyle(color: theme.colorScheme.primary),
           ),
@@ -156,35 +156,42 @@ class _ChatBotPageState extends State<ChatBotPage> {
     );
   }
 
-  Widget _buildInputBar(ThemeData theme) {
+  Widget _buildInputArea() {
     return Container(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 20),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: theme.colorScheme.surface,
-        boxShadow: [BoxShadow(color: Colors.black.withValues(alpha: 0.05), blurRadius: 10, offset: const Offset(0, -5))],
+        color: Theme.of(context).cardColor,
+        boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 4)],
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             child: TextField(
               controller: _controller,
-              onSubmitted: (_) => _sendMessage(),
+              minLines: 1,
               maxLines: null,
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
               decoration: InputDecoration(
                 hintText: "Scrivi un messaggio...",
                 filled: true,
-                fillColor: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.4),
-                border: OutlineInputBorder(borderRadius: BorderRadius.circular(25), borderSide: BorderSide.none),
+                fillColor: Theme.of(context).colorScheme.inversePrimary,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(25),
+                  borderSide: BorderSide.none,
+                ),
                 contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
             ),
           ),
-          const SizedBox(width: 10),
-          IconButton.filled(
-            onPressed: _isTyping ? null : _sendMessage,
-            icon: const Icon(Icons.send_rounded),
+          const SizedBox(width: 8),
+          CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+            child: IconButton(
+              onPressed: _isTyping ? null : _sendMessage,
+              icon: const Icon(Icons.send),
+            ),
           ),
         ],
       ),
